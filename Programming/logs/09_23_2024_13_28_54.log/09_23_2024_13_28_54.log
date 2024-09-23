@@ -1,0 +1,36 @@
+[ 2024-09-23 13:28:54,703 ] 97 werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.105:5000
+[ 2024-09-23 13:28:54,704 ] 97 werkzeug - INFO - [33mPress CTRL+C to quit[0m
+[ 2024-09-23 13:28:59,039 ] 97 werkzeug - INFO - 127.0.0.1 - - [23/Sep/2024 13:28:59] "GET /predictdata HTTP/1.1" 200 -
+[ 2024-09-23 13:30:37,984 ] 838 app - ERROR - Exception on /predictdata [POST]
+Traceback (most recent call last):
+  File "C:\AI\Practice-before-Mercedes-Project\Actual-ProjectsEtoE\1-Simple-Project\venv-EtoE-simple\Lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\AI\Practice-before-Mercedes-Project\Actual-ProjectsEtoE\1-Simple-Project\venv-EtoE-simple\Lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\AI\Practice-before-Mercedes-Project\Actual-ProjectsEtoE\1-Simple-Project\venv-EtoE-simple\Lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\AI\Practice-before-Mercedes-Project\Actual-ProjectsEtoE\1-Simple-Project\venv-EtoE-simple\Lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\AI\Practice-before-Mercedes-Project\Actual-ProjectsEtoE\1-Simple-Project\Programming\app.py", line 35, in predict_datapoint
+    pred_df = pd.DataFrame(input_data)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\AI\Practice-before-Mercedes-Project\Actual-ProjectsEtoE\1-Simple-Project\venv-EtoE-simple\Lib\site-packages\pandas\core\frame.py", line 778, in __init__
+    mgr = dict_to_mgr(data, index, columns, dtype=dtype, copy=copy, typ=manager)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\AI\Practice-before-Mercedes-Project\Actual-ProjectsEtoE\1-Simple-Project\venv-EtoE-simple\Lib\site-packages\pandas\core\internals\construction.py", line 503, in dict_to_mgr
+    return arrays_to_mgr(arrays, columns, index, dtype=dtype, typ=typ, consolidate=copy)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\AI\Practice-before-Mercedes-Project\Actual-ProjectsEtoE\1-Simple-Project\venv-EtoE-simple\Lib\site-packages\pandas\core\internals\construction.py", line 114, in arrays_to_mgr
+    index = _extract_index(arrays)
+            ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\AI\Practice-before-Mercedes-Project\Actual-ProjectsEtoE\1-Simple-Project\venv-EtoE-simple\Lib\site-packages\pandas\core\internals\construction.py", line 667, in _extract_index
+    raise ValueError("If using all scalar values, you must pass an index")
+ValueError: If using all scalar values, you must pass an index
+[ 2024-09-23 13:30:38,064 ] 97 werkzeug - INFO - 127.0.0.1 - - [23/Sep/2024 13:30:38] "[35m[1mPOST /predictdata HTTP/1.1[0m" 500 -

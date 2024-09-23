@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Molecular clinical trail Predictor</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .container {
+        max-width: 500px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    select,
+    input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 16px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    h2 {
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Molecular clinical trial Predictor</h1>
+        <form action="{{ url_for('predict_datapoint')}}" method="post">
+            <div class="form-group">
+                <label>Mol-LogP</label>
+                <input type="number" name="MolLogP" placeholder="Enter  MolLogP value" step= 0.01 required>
+            </div>
+            <div class="form-group">
+                <label>Mol-Wt</label>
+                <input type="number" name="MolWt" placeholder="Enter  MolWt value" step= 0.01 required>
+            </div>
+            <div class="form-group">
+                <label>Num-Rotatable-Bonds</label>
+                <input type="number" name="NumRotatableBonds" placeholder="Enter  NumRotatableBonds value" step= 0.01 required>
+            </div>
+            <div class="form-group">
+                <label>Aromatic-Proportion</label>
+                <input type="number" name="AromaticProportion" placeholder="Enter AromaticProportion value" step= 0.01 required>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn-primary" value="Predict  Logs Value">
+            </div>
+        </form>
+        <h2>Logs Prediction Result: {{results}} </h2> 
+    </div>
+</body>
+</html>

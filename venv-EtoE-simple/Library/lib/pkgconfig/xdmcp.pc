@@ -1,0 +1,11 @@
+prefix=c:/AI/PRACTICE-BEFORE-MERCEDES-PROJECT/ACTUAL-PROJECTSETOE/1-SIMPLE-PROJECT/VENV-ETOE-SIMPLE/Library
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: Xdmcp
+Description: X Display Manager Control Protocol library
+Version: 1.1.3
+Requires: xproto
+Cflags: -I${includedir}
+Libs: -L${libdir} -lXdmcp

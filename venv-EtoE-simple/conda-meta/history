@@ -1,0 +1,76 @@
+==> 2024-09-23 10:49:04 <==
+# cmd: C:\ProgramData\anaconda3\Scripts\conda-script.py create -p venv-EtoE-simple -y
+# conda version: 24.7.1
+==> 2024-09-23 10:51:24 <==
+# cmd: c:\ProgramData\anaconda3\Scripts\conda-script.py install -c conda-forge --prefix c:/AI/PRACTICE-BEFORE-MERCEDES-PROJECT/ACTUAL-PROJECTSETOE/1-SIMPLE-PROJECT/VENV-ETOE-SIMPLE ipykernel -y
+# conda version: 24.7.1
++conda-forge/noarch::asttokens-2.4.1-pyhd8ed1ab_0
++conda-forge/noarch::colorama-0.4.6-pyhd8ed1ab_0
++conda-forge/noarch::comm-0.2.2-pyhd8ed1ab_0
++conda-forge/noarch::decorator-5.1.1-pyhd8ed1ab_0
++conda-forge/noarch::exceptiongroup-1.2.2-pyhd8ed1ab_0
++conda-forge/noarch::executing-2.1.0-pyhd8ed1ab_0
++conda-forge/noarch::importlib-metadata-8.5.0-pyha770c72_0
++conda-forge/noarch::ipykernel-6.29.5-pyh4bbf305_0
++conda-forge/noarch::ipython-8.27.0-pyh7428d3b_0
++conda-forge/noarch::jedi-0.19.1-pyhd8ed1ab_0
++conda-forge/noarch::jupyter_client-8.6.3-pyhd8ed1ab_0
++conda-forge/noarch::matplotlib-inline-0.1.7-pyhd8ed1ab_0
++conda-forge/noarch::nest-asyncio-1.6.0-pyhd8ed1ab_0
++conda-forge/noarch::packaging-24.1-pyhd8ed1ab_0
++conda-forge/noarch::parso-0.8.4-pyhd8ed1ab_0
++conda-forge/noarch::pickleshare-0.7.5-py_1003
++conda-forge/noarch::pip-24.2-pyh8b19718_1
++conda-forge/noarch::platformdirs-4.3.6-pyhd8ed1ab_0
++conda-forge/noarch::prompt-toolkit-3.0.47-pyha770c72_0
++conda-forge/noarch::pure_eval-0.2.3-pyhd8ed1ab_0
++conda-forge/noarch::pygments-2.18.0-pyhd8ed1ab_0
++conda-forge/noarch::python-dateutil-2.9.0-pyhd8ed1ab_0
++conda-forge/noarch::setuptools-74.1.2-pyhd8ed1ab_0
++conda-forge/noarch::six-1.16.0-pyh6c4a22f_0
++conda-forge/noarch::stack_data-0.6.2-pyhd8ed1ab_0
++conda-forge/noarch::traitlets-5.14.3-pyhd8ed1ab_0
++conda-forge/noarch::typing_extensions-4.12.2-pyha770c72_0
++conda-forge/noarch::tzdata-2024a-h8827d51_1
++conda-forge/noarch::wcwidth-0.2.13-pyhd8ed1ab_0
++conda-forge/noarch::wheel-0.44.0-pyhd8ed1ab_0
++conda-forge/noarch::zipp-3.20.2-pyhd8ed1ab_0
++conda-forge/win-64::bzip2-1.0.8-h2466b09_7
++conda-forge/win-64::ca-certificates-2024.8.30-h56e8100_0
++conda-forge/win-64::debugpy-1.8.5-py312h275cf98_1
++conda-forge/win-64::jupyter_core-5.7.2-py312h2e8e312_0
++conda-forge/win-64::krb5-1.21.3-hdf4eb48_0
++conda-forge/win-64::libexpat-2.6.3-he0c23c2_0
++conda-forge/win-64::libffi-3.4.2-h8ffe710_5
++conda-forge/win-64::libsodium-1.0.20-hc70643c_0
++conda-forge/win-64::libsqlite-3.46.1-h2466b09_0
++conda-forge/win-64::libxcb-1.16-h013a479_1
++conda-forge/win-64::libzlib-1.3.1-h2466b09_1
++conda-forge/win-64::m2w64-gcc-libgfortran-5.3.0-6
++conda-forge/win-64::m2w64-gcc-libs-5.3.0-7
++conda-forge/win-64::m2w64-gcc-libs-core-5.3.0-7
++conda-forge/win-64::m2w64-gmp-6.1.0-2
++conda-forge/win-64::m2w64-libwinpthread-git-5.0.0.4634.697f757-2
++conda-forge/win-64::msys2-conda-epoch-20160418-1
++conda-forge/win-64::openssl-3.3.2-h2466b09_0
++conda-forge/win-64::psutil-6.0.0-py312h4389bb4_1
++conda-forge/win-64::pthread-stubs-0.4-hcd874cb_1001
++conda-forge/win-64::python-3.12.6-hce54a09_1_cpython
++conda-forge/win-64::python_abi-3.12-5_cp312
++conda-forge/win-64::pywin32-306-py312h53d5487_2
++conda-forge/win-64::pyzmq-26.2.0-py312hd7027bb_2
++conda-forge/win-64::tk-8.6.13-h5226925_1
++conda-forge/win-64::tornado-6.4.1-py312h4389bb4_1
++conda-forge/win-64::ucrt-10.0.22621.0-h57928b3_0
++conda-forge/win-64::vc-14.3-h8a93ad2_21
++conda-forge/win-64::vc14_runtime-14.40.33810-ha82c5b3_21
++conda-forge/win-64::vs2015_runtime-14.40.33810-h3bf8584_21
++conda-forge/win-64::xorg-kbproto-1.0.7-hcd874cb_1002
++conda-forge/win-64::xorg-libx11-1.8.9-h0076a8d_1
++conda-forge/win-64::xorg-libxau-1.0.11-hcd874cb_0
++conda-forge/win-64::xorg-libxdmcp-1.1.3-hcd874cb_0
++conda-forge/win-64::xorg-xextproto-7.3.0-hcd874cb_1003
++conda-forge/win-64::xorg-xproto-7.0.31-hcd874cb_1007
++conda-forge/win-64::xz-5.2.6-h8d14728_0
++conda-forge/win-64::zeromq-4.3.5-he1f189c_5
+# update specs: ['ipykernel']

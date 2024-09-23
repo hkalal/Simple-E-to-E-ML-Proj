@@ -1,0 +1,13 @@
+[ 2024-09-23 12:03:07,466 ] 26 root - INFO - Entered the data ingestion method or component
+[ 2024-09-23 12:03:07,467 ] 28 root - INFO - Started Reading the dataset as dataframe
+[ 2024-09-23 12:03:07,482 ] 30 root - INFO - Read the dataset as dataframe
+[ 2024-09-23 12:03:07,498 ] 36 root - INFO - Train test split initiated
+[ 2024-09-23 12:03:07,511 ] 43 root - INFO - Inmgestion of the data iss completed
+[ 2024-09-23 12:03:07,529 ] 79 root - INFO - Read train and test data completed
+[ 2024-09-23 12:03:07,530 ] 81 root - INFO - Obtaining preprocessing object
+[ 2024-09-23 12:03:07,530 ] 55 root - INFO - Categorical columns: []
+[ 2024-09-23 12:03:07,530 ] 56 root - INFO - Numerical columns: ['MolLogP', 'MolWt', 'NumRotatableBonds', 'AromaticProportion']
+[ 2024-09-23 12:03:07,532 ] 94 root - INFO - Applying preprocessing object on training dataframe and testing dataframe.
+[ 2024-09-23 12:03:07,549 ] 106 root - INFO - Saved preprocessing object.
+[ 2024-09-23 12:03:07,551 ] 33 root - INFO - Split training and test input data
+[ 2024-09-23 12:04:56,366 ] 102 root - INFO - Best found model on both training and testing dataset
