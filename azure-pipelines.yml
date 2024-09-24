@@ -19,7 +19,7 @@ steps:
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: '**'
+    Contents: 'Programming\**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
     OverWrite: true
 
