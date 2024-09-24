@@ -20,6 +20,12 @@ stages:
             replaceExistingArchive: true
           displayName: "ZIPing source files"
 
+        - task: CmdLine@2
+          inputs:
+            script: |
+              echo Write your commands here
+              rmdir /s $(Pipeline.Workspace)\drop-Artifacts
+              echo Hello world
         - task: PublishBuildArtifacts@1
           inputs:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
@@ -47,6 +53,5 @@ stages:
               script: |
                 echo Write your commands here
                 dir $(Pipeline.Workspace)\drop-Artifacts
-                dir /s $(Pipeline.Workspace)\drop-Artifacts\*.zip /OD
                 echo Hello world
           
