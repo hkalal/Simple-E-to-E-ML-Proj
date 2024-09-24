@@ -10,14 +10,16 @@ pool: AzureAgentPool
 
 stages:
 - stage: 'Build'
+  displayName: 'Build'
   jobs:
      - job: 
        steps:
+       
         - script: |
             cd Programming
             python -m pip install --upgrade pip
             pip install -r requirements.txt
-            displayName: 'Install dependencies'
+
 
         - task: CopyFiles@2
           inputs:
