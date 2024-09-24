@@ -41,25 +41,9 @@ stages:
       runOnce: 
         deploy:
           steps:
-          - task: CopyFiles@2
-            inputs:
-              SourceFolder: '$(Build.ArtifactStagingDirectory)'
-              Contents: '**'
-              TargetFolder: 'C:\Deployment\MyApplication'
-              CleanTargetFolder: true
-              OverWrite: true
-              preserveTimestamp: true
-              ignoreMakeDirErrors: true
-          
           - task: PowerShell@2
             inputs:
-              script: | 
-                # Unzip the file to the target directory
-                $zipFile = "C:\Deployment\MyApplication\*.zip"  # Specify the name of the zip file
-                $destination = "C:\Deployment\MyApplication\"  # Directory to unzip to
-                if (Test-Path $zipFile) {
-                    Expand-Archive -Path $zipFile -DestinationPath $destination -Force
-                    Write-Host "Unzipped $zipFile to $destination"
-                } else {
-                    Write-Host "Zip file not found: $zipFile"
-                }
+              script: |
+                Write-Host "Build.ArtifactStagingDirectory: $(Build.ArtifactStagingDirectory)"
+
+          
