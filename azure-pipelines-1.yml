@@ -11,7 +11,7 @@ stages:
        steps:
        - task: IISWebAppManagementOnMachineGroup@0
          inputs:
-           EnableIIS: true
+           EnableIIS: false
            IISDeploymentType: 'IISWebsite'
            ActionIISWebsite: 'CreateOrUpdateWebsite'
            WebsiteName: 'test-p'
