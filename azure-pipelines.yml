@@ -15,6 +15,13 @@ stages:
      - job: 
        steps:
        
+        - task: CondaEnvironment@0
+          inputs:
+            environmentName: 'enev-pipeline'
+            packageSpecs: 
+            updateConda: false
+            cleanEnvironment: true
+            
         - script: |
             cd Programming
             python -m pip install --upgrade pip
