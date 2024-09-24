@@ -69,6 +69,7 @@ stages:
   
           - task: PowerShell@2
             inputs:
+              targetType: 'inline'
               script: |
                 $zipFolder = "C:\Deployment\"  # Folder where the zip file is located
                 $zipFile = Get-ChildItem -Path $zipFolder -Filter "*.zip" -File | Select-Object -First 1  # Find the first zip file
