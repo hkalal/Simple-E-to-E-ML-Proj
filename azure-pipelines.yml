@@ -45,8 +45,7 @@ stages:
             inputs:
               sourceFolder: '$(Build.ArtifactStagingDirectory)'  # Path to your built artifacts
               targetFolder: 'C:\Deployment\MyApplication'  # Local deployment path on the server
-              contents: | 
-                - '**/*' 
+              
           
           - task: PowerShell@2
             inputs:
