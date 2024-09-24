@@ -87,6 +87,7 @@ stages:
                 #DISM /Online /Enable-Feature /FeatureName:IIS-WebServerRole /All
           - task: PowerShell@2
             inputs:
+              targetType: 'inline'
               script: |
                 # Check if running as an administrator
                 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
