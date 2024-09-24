@@ -53,7 +53,20 @@ stages:
           steps:
           - task: CopyFiles@2
             inputs:
-              sourceFolder: '$(Build.ArtifactStagingDirectory)/drop-Artifacts'  # Path to your built artifacts
+              sourceFolder: '$(Build.ArtifactStagingDirectory)\..\drop-Artifacts'  # Path to your built artifacts
               targetFolder: 'C:\Deployment\MyApplication'  # Local deployment path on the server
               contents: | 
                 - '**/*' 
+          
+          - task: PowerShell@2
+            inputs:
+              script: | 
+                # Unzip the file to the target directory
+                $zipFile = "C:\Deployment\MyApplication\myArchive.zip"  # Specify the name of the zip file
+                $destination = "C:\Deployment\MyApplication\"  # Directory to unzip to
+                if (Test-Path $zipFile) {
+                    Expand-Archive -Path $zipFile -DestinationPath $destination -Force
+                    Write-Host "Unzipped $zipFile to $destination"
+                } else {
+                    Write-Host "Zip file not found: $zipFile"
+                }
