@@ -1,9 +1,25 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - main
 
+pool: AzureAgentPool
+
+stages:
+- stage: 'Build'
+  displayName: 'Build'
+  jobs:
+     - job: 
+       steps:
+       - task: IISWebAppManagementOnMachineGroup@0
+         inputs:
+           EnableIIS: true
+           IISDeploymentType: 'IISWebsite'
+           ActionIISWebsite: 'CreateOrUpdateWebsite'
+           WebsiteName: 'test-p'
+           WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
+           WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+           CreateOrUpdateAppPoolForWebsite: true
+           AppPoolNameForWebsite: 'test-p'
+           DotNetVersionForWebsite: 'No Managed Code'
+           PipeLineModeForWebsite: 'Integrated'
+           AppPoolIdentityForWebsite: 'ApplicationPoolIdentity'
 
