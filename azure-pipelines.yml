@@ -129,3 +129,5 @@ stages:
                 New-WebBinding -Name $siteName -Protocol "http" -BindingInformation $bindingInfo
 
                 Write-Host "IIS website '$siteName' configured successfully."
+                env:
+                  SYSTEM_ACCESSTOKEN: $(System.AccessToken)
