@@ -52,7 +52,7 @@ stages:
             inputs:
               script: |
                 echo Write your commands here
-                dir 
+                rmdir /s /Q 'c:\deployment\'
                 echo Hello world
           
 
@@ -66,3 +66,20 @@ stages:
               flattenFolders: true
               preserveTimestamp: true
               ignoreMakeDirErrors: true
+  
+          - task: PowerShell@2
+            inputs:
+              script: |
+                $zipFolder = "C:\Deployment\"  # Folder where the zip file is located
+                $zipFile = Get-ChildItem -Path $zipFolder -Filter "*.zip" -File | Select-Object -First 1  # Find the first zip file
+
+                if ($zipFile) {
+                    $destination = $zipFolder  # Unzipping in the same folder
+                    Write-Host "Found zip file: $($zipFile.FullName)"
+                    
+                    # Unzip the file into the same folder
+                    Expand-Archive -Path $zipFile.FullName -DestinationPath $destination -Force
+                    Write-Host "Unzipped $($zipFile.FullName) to $destination"
+                } else {
+                    Write-Host "No zip file found in $zipFolder"
+                }
