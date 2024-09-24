@@ -43,9 +43,13 @@ stages:
           steps:
           - task: CopyFiles@2
             inputs:
-              sourceFolder: '$(Build.ArtifactStagingDirectory)'  # Path to your built artifacts
-              targetFolder: 'C:\Deployment\MyApplication'  # Local deployment path on the server
-              
+              SourceFolder: '$(Build.ArtifactStagingDirectory)'
+              Contents: '**'
+              TargetFolder: 'C:\Deployment\MyApplication'
+              CleanTargetFolder: true
+              OverWrite: true
+              preserveTimestamp: true
+              ignoreMakeDirErrors: true
           
           - task: PowerShell@2
             inputs:
