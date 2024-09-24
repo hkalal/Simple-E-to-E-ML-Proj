@@ -43,7 +43,7 @@ stages:
           steps:
           - task: CopyFiles@2
             inputs:
-              sourceFolder: '$(Build.ArtifactStagingDirectory)/..\drop-Artifacts'  # Path to your built artifacts
+              sourceFolder: '$(Build.ArtifactStagingDirectory)'  # Path to your built artifacts
               targetFolder: 'C:\Deployment\MyApplication'  # Local deployment path on the server
               contents: | 
                 - '**/*' 
