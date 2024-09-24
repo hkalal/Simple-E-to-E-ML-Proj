@@ -17,28 +17,16 @@ stages:
        
 
         - script: |
-             python -m venv antenv
-             call antenv/bin/activate.bat
-             python -m pip install --upgrade pip
-             pip install setup
-             pip install -r requirements.txt
-          workingDirectory: $(System.DefaultWorkingDirectory)/Programming
-          displayName: "Install requirements"
+             mkdir $(venv)
+             $(buildPython.pythonLocation)\python -m virtualenv $(venv)
+          displayName: "Install requirements1"
 
+        - script: |
+             call $(venv)\Scripts\activate.bat
+             echo "This is really bad."
+             echo "A big error has occurred!!"
+             exit 45
+          displayName: "Install requirements2"
 
-
-        - task: ArchiveFiles@2
-          inputs:
-            rootFolderOrFile: '$(Build.SourcesDirectory)'
-            includeRootFolder: false
-            archiveType: 'zip'
-            archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-            replaceExistingArchive: true
-
-        - task: PublishBuildArtifacts@1
-          inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-            ArtifactName: 'drop'
-            publishLocation: 'Container'
 
 
