@@ -52,6 +52,17 @@ stages:
             inputs:
               script: |
                 echo Write your commands here
-                dir $(Pipeline.Workspace)\drop-Artifacts
+                dir 
                 echo Hello world
           
+
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: '$(Pipeline.Workspace)\drop-Artifacts'
+              Contents: '**'
+              TargetFolder: 'c:\deployment\'
+              CleanTargetFolder: true
+              OverWrite: true
+              flattenFolders: true
+              preserveTimestamp: true
+              ignoreMakeDirErrors: true
