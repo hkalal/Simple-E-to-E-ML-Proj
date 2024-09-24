@@ -11,16 +11,6 @@ stages:
      - job: 
        steps:
        
-
-        - script: |
-             python -m venv antenv
-             call "antenv\Scripts\activate.bat"
-             python -m pip install --upgrade pip
-             pip install setup
-             pip install -r requirements.txt
-          workingDirectory: $(System.DefaultWorkingDirectory)/Programming
-          displayName: "Creating enve and Installing packages"
-
         - task: ArchiveFiles@2
           inputs:
             rootFolderOrFile: '$(System.DefaultWorkingDirectory)/Programming'
@@ -53,7 +43,7 @@ stages:
           steps:
           - task: CopyFiles@2
             inputs:
-              sourceFolder: '$(Build.ArtifactStagingDirectory)\..\drop-Artifacts'  # Path to your built artifacts
+              sourceFolder: '$(Build.ArtifactStagingDirectory)/../drop-Artifacts'  # Path to your built artifacts
               targetFolder: 'C:\Deployment\MyApplication'  # Local deployment path on the server
               contents: | 
                 - '**/*' 
