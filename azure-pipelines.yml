@@ -8,24 +8,29 @@ trigger:
 
 pool: AzureAgentPool
 
-steps:
+stages:
+- stage: 'Build'
+  displayName: 'Build'
+  jobs:
+     - job: 
+       steps:
 
-- script: |
-    cd Programming
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
+        - script: |
+            cd Programming
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+            displayName: 'Install dependencies'
 
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: 'Programming\**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-    OverWrite: true
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: '$(Build.SourcesDirectory)'
+            Contents: 'Programming\**'
+            TargetFolder: '$(Build.ArtifactStagingDirectory)'
+            OverWrite: true
 
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
