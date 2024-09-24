@@ -21,8 +21,6 @@ stages:
           workingDirectory: $(System.DefaultWorkingDirectory)/Programming
           displayName: "Creating enve and Installing packages"
 
-
-
         - task: ArchiveFiles@2
           inputs:
             rootFolderOrFile: '$(System.DefaultWorkingDirectory)/Programming'
@@ -38,3 +36,24 @@ stages:
             ArtifactName: 'drop-Artifacts'
             publishLocation: 'Container'
           displayName: "Publish-Build-Artifacts"
+          
+
+- stage: Deploy
+  displayName: 'Deploy Web App'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: DeploymentJob
+    pool:
+      name: AzureAgentPool
+    environment: class16July2024
+    strategy:
+      runOnce: 
+        deploy:
+          steps:
+          - task: CopyFiles@2
+            inputs:
+              sourceFolder: '$(Build.ArtifactStagingDirectory)'  # Path to your built artifacts
+              targetFolder: 'C:\Deployment\MyApplication'  # Local deployment path on the server
+              contents: | 
+                - '**/*' 
