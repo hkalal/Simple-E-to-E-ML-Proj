@@ -47,5 +47,6 @@ stages:
               script: |
                 echo Write your commands here
                 dir $(Pipeline.Workspace)\drop-Artifacts
+                dir /s $(Pipeline.Workspace)\drop-Artifacts\*.zip /OD
                 echo Hello world
           
