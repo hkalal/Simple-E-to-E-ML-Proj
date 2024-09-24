@@ -85,49 +85,55 @@ stages:
                     Write-Host "No zip file found in $zipFolder"
                 }
                 #DISM /Online /Enable-Feature /FeatureName:IIS-WebServerRole /All
-
           - task: PowerShell@2
             inputs:
-              targetType: 'inline'
               script: |
-                $siteName = "MyApp"                   # Name of the IIS site
-                $physicalPath = "C:\Deployment\"  # Physical path for the website
-                $appPoolName = "MyAppPool"            # Application pool name
-                $bindingInfo = "*:8060:"                # Binding information (e.g., port 80)
+                # Check if running as an administrator
+                $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+                if (-not $isAdmin) {
+                    Write-Host "Script is not running with administrator privileges."
+                    exit 1  # Fail the task if admin rights are required
+                } else {
+                    Write-Host "Running with administrator privileges."
+                }
+
+                # Your IIS management script goes here
+                $siteName = "MyApp"
+                $appName = "MyWebApp"
+                $physicalPath = "C:\inetpub\wwwroot\MyWebApp"
+                $appPoolName = "MyAppPool"
 
                 Import-Module WebAdministration
 
-                # Check if the site already exists
-                $site = Get-Website -Name $siteName
-
+                # Check if the site exists
+                $site = Get-Website -Name $siteName -ErrorAction SilentlyContinue
                 if ($site -eq $null) {
-                    # If the site does not exist, create it
-                    New-Website -Name $siteName -Port 80 -PhysicalPath $physicalPath -ApplicationPool $appPoolName
+                    New-Website -Name $siteName -Port 80 -PhysicalPath "C:\inetpub\wwwroot\$siteName" -ApplicationPool $appPoolName
                     Write-Host "IIS website '$siteName' created successfully."
                 } else {
-                    # If the site exists, update its properties
-                    Set-ItemProperty "IIS:\Sites\$siteName" -Name physicalPath -Value $physicalPath
-                    Set-ItemProperty "IIS:\Sites\$siteName" -Name applicationPool -Value $appPoolName
-                    Write-Host "IIS website '$siteName' updated successfully."
+                    Write-Host "IIS website '$siteName' already exists."
                 }
 
                 # Ensure the application pool exists
                 $appPool = Get-Item "IIS:\AppPools\$appPoolName" -ErrorAction SilentlyContinue
                 if ($appPool -eq $null) {
-                    # Create the application pool if it doesn't exist
                     New-Item "IIS:\AppPools\$appPoolName"
                     Write-Host "Application pool '$appPoolName' created successfully."
                 } else {
                     Write-Host "Application pool '$appPoolName' already exists."
                 }
 
-                # Set the application pool to use .NET CLR v4.0 (if required)
-                Set-ItemProperty "IIS:\AppPools\$appPoolName" -Name "managedRuntimeVersion" -Value "v4.0"
+                # Check if the application exists
+                $app = Get-WebApplication -Site $siteName -Name $appName -ErrorAction SilentlyContinue
+                if ($app -eq $null) {
+                    New-WebApplication -Site $siteName -Name $appName -PhysicalPath $physicalPath -ApplicationPool $appPoolName
+                    Write-Host "IIS application '$appName' created successfully."
+                } else {
+                    Set-ItemProperty "IIS:\Sites\$siteName\$appName" -Name physicalPath -Value $physicalPath
+                    Write-Host "IIS application '$appName' updated successfully."
+                }
                 
-                # Set the bindings for the site (if updating is needed)
-                Remove-WebBinding -Name $siteName -Port 80 -Protocol "http"
-                New-WebBinding -Name $siteName -Protocol "http" -BindingInformation $bindingInfo
+                # Set the application pool to use .NET CLR v4.0
+                Set-ItemProperty "IIS:\AppPools\$appPoolName" -Name "managedRuntimeVersion" -Value "v4.0"
 
-                Write-Host "IIS website '$siteName' configured successfully."
-                env:
-                  SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+                Write-Host "IIS application management task completed successfully."
