@@ -41,9 +41,11 @@ stages:
       runOnce: 
         deploy:
           steps:
-          - task: PowerShell@2
+          
+          - task: CmdLine@2
             inputs:
               script: |
-                Write-Host "Build.ArtifactStagingDirectory: $(Build.ArtifactStagingDirectory)"
-
+                echo Write your commands here
+                echo $(Build.ArtifactStagingDirectory)
+                echo Hello world
           
