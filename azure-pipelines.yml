@@ -84,3 +84,19 @@ stages:
                 } else {
                     Write-Host "No zip file found in $zipFolder"
                 }
+
+                - task: IISWebAppManagementOnMachineGroup@0
+                  inputs:
+                    EnableIIS: true
+                    IISDeploymentType: 'IISWebsite'
+                    ActionIISWebsite: 'CreateOrUpdateWebsite'
+                    WebsiteName: 'test_py'
+                    WebsitePhysicalPath: 'C:\Deployment\'
+                    WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+                    AddBinding: true
+                    Bindings: '6565'
+                    CreateOrUpdateAppPoolForWebsite: true
+                    AppPoolNameForWebsite: 'test_py_app_pool'
+                    DotNetVersionForWebsite: 'No Managed Code'
+                    PipeLineModeForWebsite: 'Integrated'
+                    AppPoolIdentityForWebsite: 'ApplicationPoolIdentity'
