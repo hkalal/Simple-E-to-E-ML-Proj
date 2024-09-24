@@ -24,7 +24,7 @@ stages:
           inputs:
             script: |
               echo Write your commands here
-              rmdir /s $(Pipeline.Workspace)\drop-Artifacts
+              rmdir /s /Q $(Pipeline.Workspace)\drop-Artifacts
               echo Hello world
         - task: PublishBuildArtifacts@1
           inputs:
