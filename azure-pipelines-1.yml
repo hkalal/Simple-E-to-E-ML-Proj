@@ -17,7 +17,7 @@ stages:
            WebsiteName: 'test-p'
            WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
            WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
-           CreateOrUpdateAppPoolForWebsite: true
+           CreateOrUpdateAppPoolForWebsite: false
            AppPoolNameForWebsite: 'test-p'
            DotNetVersionForWebsite: 'No Managed Code'
            PipeLineModeForWebsite: 'Integrated'
