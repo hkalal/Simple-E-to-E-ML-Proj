@@ -46,6 +46,6 @@ stages:
             inputs:
               script: |
                 echo Write your commands here
-                echo $(Build.ArtifactStagingDirectory)
+                echo $(Build.ArtifactStagingDirectory)\..\drop-Artifacts
                 echo Hello world
           
