@@ -17,25 +17,24 @@ stages:
        
 
         - script: |
-            python -m venv antenv
-            source antenv/bin/activate
+            cd Programming
+            Python -m venv venv-pipeline 
             python -m pip install --upgrade pip
-            pip install setup
-            pip install --target="./.python_packages/lib/site-packages" -r ./requirements.txt
+            pip install -r requirements.txt
 
 
-        -   task: ArchiveFiles@2
-            displayName: 'Archive files'
-            inputs:
-              rootFolderOrFile: '$(projectRoot)'
-              includeRootFolder: false
-              archiveType: zip
-              archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-              replaceExistingArchive: true
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: '$(Build.SourcesDirectory)'
+            Contents: 'Programming\**'
+            TargetFolder: '$(Build.ArtifactStagingDirectory)'
+            OverWrite: true
 
-            
+
         - task: PublishBuildArtifacts@1
           inputs:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
             ArtifactName: 'drop'
             publishLocation: 'Container'
+
+
