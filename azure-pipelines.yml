@@ -62,7 +62,7 @@ stages:
             inputs:
               script: | 
                 # Unzip the file to the target directory
-                $zipFile = "C:\Deployment\MyApplication\myArchive.zip"  # Specify the name of the zip file
+                $zipFile = "C:\Deployment\MyApplication\*.zip"  # Specify the name of the zip file
                 $destination = "C:\Deployment\MyApplication\"  # Directory to unzip to
                 if (Test-Path $zipFile) {
                     Expand-Archive -Path $zipFile -DestinationPath $destination -Force
