@@ -88,6 +88,7 @@ stages:
 
           - task: PowerShell@2
             inputs:
+              targetType: 'inline'
               script: |
                 $siteName = "MyApp"                   # Name of the IIS site
                 $physicalPath = "C:\Deployment\"  # Physical path for the website
