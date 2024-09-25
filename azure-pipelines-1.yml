@@ -10,19 +10,23 @@ stages:
      - job: 
        steps:
            
-            
+             
+
+
         - task: IISWebAppManagementOnMachineGroup@0
           inputs:
             IISDeploymentType: 'IISWebsite'
             ActionIISWebsite: 'CreateOrUpdateWebsite'
-            WebsiteName: 'test-my-site'
-            WebsitePhysicalPath: 'C:\deployment'
+            WebsiteName: 'test-my-site-1'
+            WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
             WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+            AddBinding: true
+            Bindings: 'http/All Unassigned:55:'
             CreateOrUpdateAppPoolForWebsite: true
             ConfigureAuthenticationForWebsite: true
-            AppPoolNameForWebsite: 'test-my-site-pool'
+            AppPoolNameForWebsite: 'test-my-site-pool-1'
             DotNetVersionForWebsite: 'No Managed Code'
-            PipeLineModeForWebsite: 'Classic'
+            PipeLineModeForWebsite: 'Integrated'
             AppPoolIdentityForWebsite: 'ApplicationPoolIdentity'
             AnonymousAuthenticationForWebsite: true
             BasicAuthenticationForWebsite: true
