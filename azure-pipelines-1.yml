@@ -9,17 +9,12 @@ stages:
   jobs:
      - job: 
        steps:
-       - task: IISWebAppManagementOnMachineGroup@0
-         inputs:
-           EnableIIS: false
-           IISDeploymentType: 'IISWebsite'
-           ActionIISWebsite: 'CreateOrUpdateWebsite'
-           WebsiteName: 'test-p'
-           WebsitePhysicalPath: '%SystemDrive%\inetpub\wwwroot'
-           WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
-           CreateOrUpdateAppPoolForWebsite: false
-           AppPoolNameForWebsite: 'test-p'
-           DotNetVersionForWebsite: 'No Managed Code'
-           PipeLineModeForWebsite: 'Integrated'
-           AppPoolIdentityForWebsite: 'ApplicationPoolIdentity'
 
+        - task: IISWebAppManagementOnMachineGroup@0
+          inputs:
+            IISDeploymentType: 'IISApplicationPool'
+            ActionIISApplicationPool: 'CreateOrUpdateAppPool'
+            AppPoolName: 'test-app-pool'
+            DotNetVersion: 'No Managed Code'
+            PipeLineMode: 'Classic'
+            AppPoolIdentity: 'LocalSystem'
