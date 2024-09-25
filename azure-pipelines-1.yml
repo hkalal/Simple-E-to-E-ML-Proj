@@ -12,9 +12,16 @@ stages:
 
         - task: IISWebAppManagementOnMachineGroup@0
           inputs:
-            IISDeploymentType: 'IISApplicationPool'
-            ActionIISApplicationPool: 'CreateOrUpdateAppPool'
-            AppPoolName: 'test-app-pool'
-            DotNetVersion: 'No Managed Code'
-            PipeLineMode: 'Classic'
-            AppPoolIdentity: 'LocalSystem'
+            EnableIIS: true
+            IISDeploymentType: 'IISWebsite'
+            ActionIISWebsite: 'CreateOrUpdateWebsite'
+            WebsiteName: 'My-site'
+            WebsitePhysicalPath: 'C:\deployment'
+            WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+            CreateOrUpdateAppPoolForWebsite: true
+            ConfigureAuthenticationForWebsite: true
+            DotNetVersionForWebsite: 'No Managed Code'
+            PipeLineModeForWebsite: 'Classic'
+            AppPoolIdentityForWebsite: 'ApplicationPoolIdentity'
+            AnonymousAuthenticationForWebsite: true
+            BasicAuthenticationForWebsite: true
