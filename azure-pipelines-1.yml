@@ -37,3 +37,41 @@ stages:
             AppPoolIdentityForWebsite: 'ApplicationPoolIdentity'
             AnonymousAuthenticationForWebsite: true
             BasicAuthenticationForWebsite: true
+
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              # Write your PowerShell commands here.
+              $siteName = "MyApp"                   # Name of the IIS site
+                $physicalPath = "C:\Deployment\"  # Physical path for the website
+                $appPoolName = "MyAppPool"            # Application pool name
+                $bindingInfo = "*:8060:"                # Binding information (e.g., port 80)
+
+                Import-Module WebAdministration
+
+                # Check if the site already exists
+                $site = Get-Website -Name $siteName
+
+                if ($site -eq $null) {
+                    # If the site does not exist, create it
+                    New-Website -Name $siteName -Port 8060 -PhysicalPath $physicalPath -ApplicationPool $appPoolName
+                    Write-Host "IIS website '$siteName' created successfully."
+                } else {
+                    # If the site exists, update its properties
+                    Set-ItemProperty "IIS:\Sites\$siteName" -Name physicalPath -Value $physicalPath
+                    Set-ItemProperty "IIS:\Sites\$siteName" -Name applicationPool -Value $appPoolName
+                    Write-Host "IIS website '$siteName' updated successfully."
+                }
+
+                # Ensure the application pool exists
+                $appPool = Get-Item "IIS:\AppPools\$appPoolName" -ErrorAction SilentlyContinue
+                if ($appPool -eq $null) {
+                    # Create the application pool if it doesn't exist
+                    New-Item "IIS:\AppPools\$appPoolName"
+                    Write-Host "Application pool '$appPoolName' created successfully."
+                } else {
+                    Write-Host "Application pool '$appPoolName' already exists."
+                }
+
+              
