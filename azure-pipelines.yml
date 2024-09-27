@@ -116,7 +116,7 @@ stages:
                    "bindings":[{
                                   "protocol":"http",
                                   "ipAddress":"*",
-                                  "port":"15",
+                                  "port":"1515",
                                   "sslThumbprint":"",
                                   "sniFlag":false 
                               }]
