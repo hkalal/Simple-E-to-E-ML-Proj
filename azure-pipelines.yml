@@ -52,7 +52,7 @@ stages:
             inputs:
               script: |
                 echo Write your commands here
-                rmdir /s /Q 'c:\deployment\'
+                rmdir /s /Q 'c:\TestFlaskDeployment\'
                 echo Hello world
           
 
@@ -60,7 +60,7 @@ stages:
             inputs:
               SourceFolder: '$(Pipeline.Workspace)\drop-Artifacts'
               Contents: '**'
-              TargetFolder: 'c:\deployment\'
+              TargetFolder: 'c:\TestFlaskDeployment\'
               CleanTargetFolder: true
               OverWrite: true
               flattenFolders: true
@@ -71,7 +71,7 @@ stages:
             inputs:
               targetType: 'inline'
               script: |
-                $zipFolder = "C:\Deployment\"  # Folder where the zip file is located
+                $zipFolder = "C:\TestFlaskDeployment\"  # Folder where the zip file is located
                 $zipFile = Get-ChildItem -Path $zipFolder -Filter "*.zip" -File | Select-Object -First 1  # Find the first zip file
 
                 if ($zipFile) {
@@ -84,57 +84,144 @@ stages:
                 } else {
                     Write-Host "No zip file found in $zipFolder"
                 }
-                #DISM /Online /Enable-Feature /FeatureName:IIS-WebServerRole /All
+
+          - task: CmdLine@2
+            inputs:
+              script: |
+                echo Write your commands here
+                
+                  cd "C:\TestFlaskDeployment\"
+
+                  set envvar=env-$(Build.BuildId)
+      
+                  Python -m venv %envvar%
+
+                  pip install wfastcgi
+
+                  call %envvar%\Scripts\activate.bat
+
+                 
+                  echo Hello world
+               
+          - task: IISWebAppManagementOnMachineGroup@0
+            inputs:
+              IISDeploymentType: 'IISWebsite'
+              ActionIISWebsite: 'CreateOrUpdateWebsite'
+              WebsiteName: 'TestFlaskDeployment'
+              WebsitePhysicalPath: 'C:\TestFlaskDeployment'
+              WebsitePhysicalPathAuth: 'WebsiteUserPassThrough'
+              AddBinding: true
+              Bindings: |
+                {
+                   "bindings":[{
+                                  "protocol":"http",
+                                  "ipAddress":"*",
+                                  "port":"15",
+                                  "sslThumbprint":"",
+                                  "sniFlag":false 
+                              }]
+                }                                     
+              CreateOrUpdateAppPoolForWebsite: true
+              AppPoolNameForWebsite: 'TestFlaskDeployment-app-pool'
+              DotNetVersionForWebsite: 'No Managed Code'
+              PipeLineModeForWebsite: 'Integrated'
+              AppPoolIdentityForWebsite: 'ApplicationPoolIdentity'
+              
+
+
           - task: PowerShell@2
             inputs:
               targetType: 'inline'
               script: |
-                # Check if running as an administrator
-                $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
-                if (-not $isAdmin) {
-                    Write-Host "Script is not running with administrator privileges."
-                    exit 1  # Fail the task if admin rights are required
-                } else {
-                    Write-Host "Running with administrator privileges."
-                }
+                # Write your PowerShell commands here.
+                # Define paths and environment variables
+                  $pythonPath = "C:\Python312\python.exe"
+                  $wfastcgiScript = "C:\Python312\Lib\site-packages\wfastcgi.py"
+                  $physicalPath = "C:\TestFlaskDeployment"  # Update this to your actual application path
+                  $siteName = "TestFlaskDeployment"
 
-                # Your IIS management script goes here
-                $siteName = "MyApp"
-                $appName = "MyWebApp"
-                $physicalPath = "C:\inetpub\wwwroot\MyWebApp"
-                $appPoolName = "MyAppPool"
+                  # Register the FastCGI application globally
+                  $fastCgiAppPath = "MACHINE/WEBROOT/APPHOST"
+                  Write-Host Get-Website
 
-                Import-Module WebAdministration
+                  # Update WSGI Handler
+                  Set-WebConfigurationProperty -pspath "$fastCgiAppPath/$siteName/" -filter "system.webServer/handlers" -name "." -value @{
+                      name = 'Python FastCGI'
+                      path = "*"
+                      verb = "*"
+                      modules = "FastCgiModule"
+                      scriptProcessor = "$pythonPath|$wfastcgiScript"
+                      resourceType = "Either"
+                      requireAccess = "Script"
+                  }
 
-                # Check if the site exists
-                $site = Get-Website -Name $siteName -ErrorAction SilentlyContinue
-                if ($site -eq $null) {
-                    New-Website -Name $siteName -Port 80 -PhysicalPath "C:\inetpub\wwwroot\$siteName" -ApplicationPool $appPoolName
-                    Write-Host "IIS website '$siteName' created successfully."
-                } else {
-                    Write-Host "IIS website '$siteName' already exists."
-                }
+                  # Check if FastCGI application already exists
+                  $existingFastCgi = Get-WebConfiguration -pspath $fastCgiAppPath -filter "system.webServer/fastCgi/application[@fullPath='$pythonPath']" -ErrorAction SilentlyContinue
 
-                # Ensure the application pool exists
-                $appPool = Get-Item "IIS:\AppPools\$appPoolName" -ErrorAction SilentlyContinue
-                if ($appPool -eq $null) {
-                    New-Item "IIS:\AppPools\$appPoolName"
-                    Write-Host "Application pool '$appPoolName' created successfully."
-                } else {
-                    Write-Host "Application pool '$appPoolName' already exists."
-                }
+                  if (-not $existingFastCgi) {
+                      # If it does not exist, create the FastCGI application
+                      Add-WebConfigurationProperty -pspath $fastCgiAppPath -filter "system.webServer/fastCgi" -name "." -value @{
+                          fullPath = $pythonPath
+                          arguments = "$wfastcgiScript"
+                          maxInstances = 10
+                          idleTimeout = 300  # Just a number, no quotes
+                          activityTimeout = 60
+                          requestTimeout = 90
+                          instanceMaxRequests = 10000
+                          protocol = "NamedPipe"
+                      }
 
-                # Check if the application exists
-                $app = Get-WebApplication -Site $siteName -Name $appName -ErrorAction SilentlyContinue
-                if ($app -eq $null) {
-                    New-WebApplication -Site $siteName -Name $appName -PhysicalPath $physicalPath -ApplicationPool $appPoolName
-                    Write-Host "IIS application '$appName' created successfully."
-                } else {
-                    Set-ItemProperty "IIS:\Sites\$siteName\$appName" -Name physicalPath -Value $physicalPath
-                    Write-Host "IIS application '$appName' updated successfully."
-                }
-                
-                # Set the application pool to use .NET CLR v4.0
-                Set-ItemProperty "IIS:\AppPools\$appPoolName" -Name "managedRuntimeVersion" -Value "v4.0"
+                      # Initialize environment variables as a collection
+                      Add-WebConfigurationProperty -pspath $fastCgiAppPath -filter "system.webServer/fastCgi/application[@fullPath='$pythonPath']" -name "environmentVariables" -value @{ name="x"; value="x" }
+                  }
 
-                Write-Host "IIS application management task completed successfully."
+                  # Updating existing FastCGI application settings
+                  try {
+                      # Update existing FastCGI application settings
+                      $appPath = "system.webServer/fastCgi/application[@fullPath='$pythonPath']"
+
+                      # Set properties with proper value assignments
+                      Set-WebConfigurationProperty -pspath $fastCgiAppPath -filter "$appPath" -name "arguments" -value "$wfastcgiScript"
+                      Set-WebConfigurationProperty -pspath $fastCgiAppPath -filter "$appPath" -name "maxInstances" -value 10
+                      Set-WebConfigurationProperty -pspath $fastCgiAppPath -filter "$appPath" -name "idleTimeout" -value 300  # No quotes needed
+                      Set-WebConfigurationProperty -pspath $fastCgiAppPath -filter "$appPath" -name "activityTimeout" -value 60
+                      Set-WebConfigurationProperty -pspath $fastCgiAppPath -filter "$appPath" -name "requestTimeout" -value 90
+                      Set-WebConfigurationProperty -pspath $fastCgiAppPath -filter "$appPath" -name "instanceMaxRequests" -value 10000
+                      Set-WebConfigurationProperty -pspath $fastCgiAppPath -filter "$appPath" -name "protocol" -value "NamedPipe"
+
+                      # Ensure the environmentVariables section is initialized before adding values
+                      $envVarsPath = "system.webServer/fastCgi/application[@fullPath='$pythonPath']/environmentVariables"
+                      if (-not (Get-WebConfiguration -pspath $fastCgiAppPath -filter $envVarsPath -ErrorAction SilentlyContinue)) {
+                          Add-WebConfigurationProperty -pspath $fastCgiAppPath -filter $envVarsPath -name "." -value @{ name=""; value="" }
+                      }
+
+                      # Now add or update the environment variables
+                      $envVars = @(
+                          @{ name = "WSGI_HANDLER"; value = "flaskIIS.app" },
+                          @{ name = "PYTHONPATH"; value = $physicalPath }
+                      )
+
+                      foreach ($envVar in $envVars) {
+                          $name = $envVar.name
+                          $value = $envVar.value
+
+                          # Check if the environment variable already exists
+                          $existingEnvVar = Get-WebConfiguration -pspath $fastCgiAppPath -filter "$envVarsPath/environmentVariable[@name='$name']" -ErrorAction SilentlyContinue
+
+                          if (-not $existingEnvVar) {
+                              # If it does not exist, add it
+                              Add-WebConfigurationProperty -pspath $fastCgiAppPath -filter "$envVarsPath" -name "." -value @{
+                                  name = $name
+                                  value = $value
+                              }
+                          } else {
+                              # If it exists, update the existing variable
+                              Set-WebConfigurationProperty -pspath $fastCgiAppPath -filter "$envVarsPath/environmentVariable[@name='$name']" -name "value" -value $value
+                          }
+                      }
+
+                  } catch {
+                      Write-Error "An error occurred while updating the FastCGI application: $_"
+                  }
+
+                Write-Host "Hello World"
