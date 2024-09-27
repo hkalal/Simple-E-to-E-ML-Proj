@@ -100,7 +100,7 @@ stages:
 
                   call %envvar%\Scripts\activate.bat
 
-                 
+                  pip install -r requirements.txt
                   echo Hello world
                
           - task: IISWebAppManagementOnMachineGroup@0
