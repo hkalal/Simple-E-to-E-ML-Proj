@@ -23,62 +23,66 @@ class DataTransformationConfig:
 class DataTransformation:
     def __init__(self):
         self.data_transformation_config=DataTransformationConfig()
+        
 
-
-
-def get_data_transformer_object(self):
-    """
-    Creates a preprocessor object using FunctionTransformer for numerical and categorical columns.
-    
-    Returns:
-    Pipeline: Preprocessing pipeline that applies transformations to datasets.
-    """
-    try:
-        numerical_columns = ["MolLogP", "MolWt","NumRotatableBonds", "AromaticProportion"]
-        categorical_columns = []
-        # Define transformation functions for numerical and categorical columns
-        def process_numerical_data(df):
-            num_pipeline = Pipeline(
-                steps=[
-                    ("imputer", SimpleImputer(strategy="median")),
-                    ("scaler", StandardScaler())
-                ]
-            )
-            return num_pipeline.fit_transform(df[self.numerical_columns])
-
-        def process_categorical_data(df):
-            cat_pipeline = Pipeline(
-                steps=[
-                    ("imputer", SimpleImputer(strategy="most_frequent")),
-                    ("one_hot_encoder", OneHotEncoder()),
-                    ("scaler", StandardScaler(with_mean=False))
-                ]
-            )
-            return cat_pipeline.fit_transform(df[self.categorical_columns])
-
-        # FunctionTransformer applies the transformation to the respective columns
-        transformers = []
-        if self.numerical_columns:
-            num_transformer = FunctionTransformer(lambda df: process_numerical_data(df))
-            transformers.append(("num_transformer", num_transformer, self.numerical_columns))
+    numerical_columns = ["MolLogP", "MolWt","NumRotatableBonds", "AromaticProportion"]
+    categorical_columns = []
+        
+    def get_data_transformer_object(self):
+        """
+        Creates a preprocessor object using FunctionTransformer for numerical and categorical columns.
+        
+        Returns:
+        Pipeline: Preprocessing pipeline that applies transformations to datasets.
+        """
+        try:
             
-        if self.categorical_columns:
-            cat_transformer = FunctionTransformer(lambda df: process_categorical_data(df))
-            transformers.append(("cat_transformer", cat_transformer, self.categorical_columns))
+            # Define transformation functions for numerical and categorical columns
+            def process_numerical_data(df):
+                num_pipeline = Pipeline(
+                    steps=[
+                        ("imputer", SimpleImputer(strategy="median")),
+                        ("scaler", StandardScaler())
+                    ]
+                )
+                return num_pipeline.fit_transform(df[self.numerical_columns])
 
-        # Create a custom pipeline that applies the transformations
-        preprocessing_pipeline = Pipeline(
-            steps=[
-                ("transform", FunctionTransformer(lambda df: pd.concat(
-                    [pd.DataFrame(process_numerical_data(df)), pd.DataFrame(process_categorical_data(df))], axis=1)))
-            ]
-        )
+            def process_categorical_data(df):
+                if not self.categorical_columns:
+                    return pd.DataFrame()  # Return an empty DataFrame if no categorical columns
 
-        logging.info("Preprocessing pipeline using FunctionTransformer created successfully.")
-        return preprocessing_pipeline
+                cat_pipeline = Pipeline(
+                    steps=[
+                        ("imputer", SimpleImputer(strategy="most_frequent")),
+                        ("one_hot_encoder", OneHotEncoder()),
+                        ("scaler", StandardScaler(with_mean=False))
+                    ]
+                )
+                return cat_pipeline.fit_transform(df[self.categorical_columns])
 
-    except Exception as e:
-        raise CustomException(e, sys)
+            # FunctionTransformer applies the transformation to the respective columns
+            transformers = []
+            if self.numerical_columns:
+                num_transformer = FunctionTransformer(lambda df: process_numerical_data(df))
+                transformers.append(("num_transformer", num_transformer, self.numerical_columns))
+                
+            if self.categorical_columns:
+                cat_transformer = FunctionTransformer(lambda df: process_categorical_data(df))
+                transformers.append(("cat_transformer", cat_transformer, self.categorical_columns))
+
+            # Create a custom pipeline that applies the transformations
+            preprocessing_pipeline = Pipeline(
+                steps=[
+                    ("transform", FunctionTransformer(lambda df: pd.concat(
+                        [pd.DataFrame(process_numerical_data(df)), pd.DataFrame(process_categorical_data(df))], axis=1)))
+                ]
+            )
+
+            logging.info("Preprocessing pipeline using FunctionTransformer created successfully.")
+            return preprocessing_pipeline
+
+        except Exception as e:
+            raise CustomException(e, sys)
 
         
     def initiate_data_transformation(self,train_path,test_path):
