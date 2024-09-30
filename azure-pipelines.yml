@@ -197,7 +197,7 @@ stages:
 
                       # Now add or update the environment variables
                       $envVars = @(
-                          @{ name = "WSGI_HANDLER"; value = "flaskIIS.app" },
+                          @{ name = "WSGI_HANDLER"; value = "app.app" },
                           @{ name = "PYTHONPATH"; value = $physicalPath }
                       )
 
